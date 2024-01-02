@@ -5,6 +5,7 @@ from sqlalchemy import (
     String,
     Enum
 )
+from schemas import UserRole   
 
 class DbUser(Base):
 
@@ -16,3 +17,4 @@ class DbUser(Base):
     email = Column(String(100), index=True, unique=True, nullable=True)
     username = Column(String(100), index=True, nullable=False, unique= True)
     password = Column(String(100), nullable=False) 
+    role = Column(Enum(UserRole), index=True, nullable=False)
