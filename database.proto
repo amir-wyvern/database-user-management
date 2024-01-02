@@ -1,22 +1,20 @@
 syntax = "proto3";
 
 service DataBase {
-  rpc GetUser(RequestUserInfo) returns (BaseResponse) {}
+  rpc GetUser(RequestUserInfo) returns (ResponseUserInfo) {}
   rpc NewUser(RequestNewUSer) returns (BaseResponse) {}
   rpc ModifyUserPassword(RequestModifyUserPassword) returns (BaseResponse) {}
   rpc ModifyUserInfo(RequestModifyUserInfo) returns (BaseResponse) {}
   rpc DeleteUser(RequestDeleteUser) returns (BaseResponse) {}
-
 }
 
 message RequestNewUSer {
     string name = 1;
     string username = 2;
     string password = 3;
-    optional string phone_number = 4;
-    string email = 5;
+    string phone_number = 4;
+    optional string email = 5;
     string role = 6;
-    string token = 7;
 }
 
 message RequestModifyUserPassword {
@@ -26,14 +24,13 @@ message RequestModifyUserPassword {
 
 message RequestModifyUserInfo {
     string username = 1;
-    string name = 2;
+    optional string name = 2;
     optional string email = 3;
-    string phone_number = 4;
+    optional string phone_number = 4;
 }
 
 message RequestDeleteUser {
     string username = 1;
-    string password = 2;
 }
 
 message RequestUserInfo {
@@ -45,17 +42,12 @@ message BaseResponse {
     int32 code = 2;
 }
 
-message TokenResponse {
-    string token = 1;
-}
-
 message ResponseUserInfo {
     string username = 1;
     int32 name = 2;
     optional string email = 3;
     string phone_number = 4;
     string role = 5;
-    string token = 6;
 }
 
 
