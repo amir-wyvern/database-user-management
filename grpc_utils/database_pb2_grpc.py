@@ -17,17 +17,7 @@ class DataBaseStub(object):
         self.GetUser = channel.unary_unary(
                 '/DataBase/GetUser',
                 request_serializer=database__pb2.RequestUserInfo.SerializeToString,
-                response_deserializer=database__pb2.BaseResponse.FromString,
-                )
-        self.GetUserToken = channel.unary_unary(
-                '/DataBase/GetUserToken',
-                request_serializer=database__pb2.RequestGetToken.SerializeToString,
-                response_deserializer=database__pb2.TokenResponse.FromString,
-                )
-        self.SetUserToken = channel.unary_unary(
-                '/DataBase/SetUserToken',
-                request_serializer=database__pb2.RequestSetToken.SerializeToString,
-                response_deserializer=database__pb2.BaseResponse.FromString,
+                response_deserializer=database__pb2.ResponseUserInfo.FromString,
                 )
         self.NewUser = channel.unary_unary(
                 '/DataBase/NewUser',
@@ -55,18 +45,6 @@ class DataBaseServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def GetUser(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def GetUserToken(self, request, context):
-        """Missing associated documentation comment in .proto file."""
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def SetUserToken(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -102,17 +80,7 @@ def add_DataBaseServicer_to_server(servicer, server):
             'GetUser': grpc.unary_unary_rpc_method_handler(
                     servicer.GetUser,
                     request_deserializer=database__pb2.RequestUserInfo.FromString,
-                    response_serializer=database__pb2.BaseResponse.SerializeToString,
-            ),
-            'GetUserToken': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetUserToken,
-                    request_deserializer=database__pb2.RequestGetToken.FromString,
-                    response_serializer=database__pb2.TokenResponse.SerializeToString,
-            ),
-            'SetUserToken': grpc.unary_unary_rpc_method_handler(
-                    servicer.SetUserToken,
-                    request_deserializer=database__pb2.RequestSetToken.FromString,
-                    response_serializer=database__pb2.BaseResponse.SerializeToString,
+                    response_serializer=database__pb2.ResponseUserInfo.SerializeToString,
             ),
             'NewUser': grpc.unary_unary_rpc_method_handler(
                     servicer.NewUser,
@@ -157,41 +125,7 @@ class DataBase(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/DataBase/GetUser',
             database__pb2.RequestUserInfo.SerializeToString,
-            database__pb2.BaseResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def GetUserToken(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/DataBase/GetUserToken',
-            database__pb2.RequestGetToken.SerializeToString,
-            database__pb2.TokenResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def SetUserToken(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/DataBase/SetUserToken',
-            database__pb2.RequestSetToken.SerializeToString,
-            database__pb2.BaseResponse.FromString,
+            database__pb2.ResponseUserInfo.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
