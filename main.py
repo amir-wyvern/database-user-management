@@ -42,6 +42,33 @@ else:
 
 class DataBaseService(pb2_grpc.DataBaseServicer):
 
+     def GetUser(self, request, context):
+
+        try:
+            user = db_user.get_user_by_username(request.username ,get_db().__next__())
+
+            if user is None:
+
+                return pb2.BaseResponse(**{'message': 'username not exist' , 'code': 1401})
+            
+            user_data = {
+                'username': user.username,
+                'name': user.name,
+                'email': user.email,
+                'phone_number': user.phone_number,
+                'role': user.role
+            } 
+            return pb2.BaseResponse(**{'message': 'success' , 'code': 1200, 'data': user_data})
+
+
+        except Exception as e:
+        
+            logging.error(f'error [fn: GetUser err_msg: {e}')
+
+            return pb2.BaseResponse(**{'message': 'failed' , 'code': 1400})
+
+
+
      def NewUser(self, request, context):
 
         receive_data = {
@@ -57,15 +84,15 @@ class DataBaseService(pb2_grpc.DataBaseServicer):
             db_user.create_user(UserRegisterForDataBase(**receive_data) ,get_db().__next__())
             logging.info(f'create user was successfully [username: {request.username}]')
 
+            return pb2.BaseResponse(**{'message': 'success' , 'code': 1200})
+        
         except Exception as e:
         
             logging.error(f'error [fn: NewUser err_msg: {e}')
 
             return pb2.BaseResponse(**{'message': 'failed' , 'code': 1400})
 
-
-        return pb2.BaseResponse(**{'message': 'success' , 'code': 1200})
-
+     
 
 def serve():
 
