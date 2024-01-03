@@ -70,16 +70,23 @@ class DataBaseService(pb2_grpc.DataBaseServicer):
 
      def NewUser(self, request, context):
 
-        receive_data = {
-            'name': request.name,
-            'username': request.username,
-            'password': request.password,
-            'phone_number': request.phone_number,
-            'email': request.email,
-            'role': request.role
-        }
+
         try:
-        
+            
+            user = db_user.get_user_by_username(request.username ,get_db().__next__())
+
+            if user:
+
+                return pb2.BaseResponse(**{'message': 'username already exist' , 'code': 1403})
+            
+            receive_data = {
+                'name': request.name,
+                'username': request.username,
+                'password': request.password,
+                'phone_number': request.phone_number,
+                'email': request.email,
+                'role': request.role
+            }
             db_user.create_user(UserRegisterForDataBase(**receive_data) ,get_db().__next__())
             logging.info(f'create user was successfully [username: {request.username}]')
 
