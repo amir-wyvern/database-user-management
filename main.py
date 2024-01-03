@@ -183,6 +183,29 @@ class DataBaseService(pb2_grpc.DataBaseServicer):
             return pb2.BaseResponse(**{'message': 'failed' ,'code': 1400})
 
 
+     def DeleteUser(self, request, context):
+
+        try:
+            user = db_user.get_user_by_username(request.username ,get_db().__next__())
+
+            if user is None:
+
+                return pb2.BaseResponse(**{'message': 'username not exist' ,'code': 1401})
+            
+            db_user.delete_user(request.phone_number ,get_db().__next__())
+
+
+            logging.info(f'user deleted successfully [username: {request.username}]')
+
+            return pb2.BaseResponse(**{'message': 'success' ,'code': 1200})
+        
+        except Exception as e:
+        
+            logging.error(f'error [fn: DeleteUser err_msg: {e}')
+
+            return pb2.BaseResponse(**{'message': 'failed' ,'code': 1400})
+
+     
 
 def serve():
 
