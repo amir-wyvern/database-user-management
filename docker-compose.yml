@@ -1,0 +1,30 @@
+services:
+
+  grpc:
+    build: .
+    depends_on:
+      - db
+  
+    networks:
+      - database_net
+
+    command: ["python", "app.py"]
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: testpass
+
+    networks:
+      - database_net
+
+    # healthcheck:
+    #   test: [CMD-SHELL", "pg_isready"]
+    #     interval: "1s"
+    #   timeout: "5s"
+    #     retries: 10
+
+networks:
+  database_net:
+    driver: bridge
