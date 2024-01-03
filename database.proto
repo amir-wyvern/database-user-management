@@ -2,13 +2,13 @@ syntax = "proto3";
 
 service DataBase {
   rpc GetUser(RequestUserInfo) returns (ResponseUserInfo) {}
-  rpc NewUser(RequestNewUSer) returns (BaseResponse) {}
+  rpc NewUser(RequestNewUser) returns (BaseResponse) {}
   rpc ModifyUserPassword(RequestModifyUserPassword) returns (BaseResponse) {}
   rpc ModifyUserInfo(RequestModifyUserInfo) returns (BaseResponse) {}
   rpc DeleteUser(RequestDeleteUser) returns (BaseResponse) {}
 }
 
-message RequestNewUSer {
+message RequestNewUser {
     string name = 1;
     string username = 2;
     string password = 3;
