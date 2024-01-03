@@ -2,3 +2,4 @@
 1400= failed in create new user
 1401= username not exists
 1402= There is no field to update
+1403= User already exists
