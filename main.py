@@ -146,8 +146,43 @@ class DataBaseService(pb2_grpc.DataBaseServicer):
             logging.error(f'error [fn: ModifyUserPassword err_msg: {e}')
 
             return pb2.BaseResponse(**{'message': 'failed' ,'code': 1400})
+        
+        
+     def ModifyUserInfo(self, request, context):
 
-     
+        try:
+            user = db_user.get_user_by_username(request.username ,get_db().__next__())
+
+            if user is None:
+
+                return pb2.BaseResponse(**{'message': 'username not exist' ,'code': 1401})
+            
+            if not any([request.name, request.email, request.phone_number]):
+            
+                return pb2.BaseResponse(**{'message': 'There is no field to update' ,'code': 1402})
+                
+            if request.name:
+                db_user.update_name(user.user_id, request.password ,get_db().__next__(), commit= False)
+            
+            if request.email:
+                db_user.update_email(user.user_id, request.email ,get_db().__next__(), commit= False)
+            
+            if request.phone_number:
+                db_user.update_phone_number(user.user_id, request.phone_number ,get_db().__next__(), commit= False)
+
+            get_db().__next__().commit()
+
+            logging.info(f'user info updated successfully [username: {request.username}]')
+
+            return pb2.BaseResponse(**{'message': 'success' ,'code': 1200})
+        
+        except Exception as e:
+        
+            logging.error(f'error [fn: ModifyUserPassword err_msg: {e}')
+
+            return pb2.BaseResponse(**{'message': 'failed' ,'code': 1400})
+
+
 
 def serve():
 
