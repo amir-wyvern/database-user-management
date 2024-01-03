@@ -21,8 +21,8 @@ class PhoneNumberStr(str):
 
 class UserRole(str ,Enum):
 
-    ADMIN = 'admin'
-    USER = 'user'
+    ADMIN = 'ADMIN'
+    USER = 'USER'
 
 class UserRegisterForDataBase(BaseModel):
 
