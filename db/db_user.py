@@ -7,7 +7,7 @@ from db.models import DbUser
 from typing import List
 
 
-def create_user(request: UserRegisterForDataBase, db: Session, commit=True) -> DbUser:
+def create_user(request: UserRegisterForDataBase, db: Session, commit= True) -> DbUser:
 
     user = DbUser(
         name= request.name,
@@ -56,48 +56,53 @@ def get_user_by_username(username, db:Session) -> DbUser:
     return db.query(DbUser).filter(DbUser.username == username ).first()
     
 
-def update_role(user_id, new_role: UserRole, db:Session):
+def update_role(user_id, new_role: UserRole, db:Session ,commit= True):
 
     user = db.query(DbUser).filter(DbUser.user_id == user_id )
     user.update({DbUser.role: new_role})
-    db.commit()
-    
+    if commit:
+        db.commit()    
+
     return True
 
 
-def update_phone_number(user_id, new_phone_number: str, db:Session):
+def update_phone_number(user_id, new_phone_number: str, db:Session ,commit= True):
 
     user = db.query(DbUser).filter(DbUser.user_id == user_id )
     user.update({DbUser.phone_number: new_phone_number})
-    db.commit()
-    
+    if commit:
+        db.commit()    
+            
     return True
 
 
-def update_name(user_id, new_name: str, db:Session):
+def update_name(user_id, new_name: str, db:Session ,commit= True):
 
     user = db.query(DbUser).filter(DbUser.user_id == user_id )
     user.update({DbUser.name: new_name})
-    db.commit()
-    
+    if commit:
+        db.commit()    
+            
     return True
 
 
-def update_email(user_id, new_email: str, db:Session):
+def update_email(user_id, new_email: str, db:Session ,commit= True):
 
     user = db.query(DbUser).filter(DbUser.user_id == user_id )
     user.update({DbUser.email: new_email})
-    db.commit()
-    
+    if commit:
+        db.commit()    
+            
     return True
 
 
-def update_password(user_id, new_password: str, db:Session):
+def update_password(user_id, new_password: str, db:Session ,commit= True):
 
     user = db.query(DbUser).filter(DbUser.user_id == user_id )
     user.update({DbUser.password: new_password})
-    db.commit()
-    
+    if commit:
+        db.commit()    
+            
     return True 
 
 
