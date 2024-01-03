@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0e\x64\x61tabase.proto\"\x8b\x01\n\x0eRequestNewUSer\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\x12\x19\n\x0cphone_number\x18\x04 \x01(\tH\x00\x88\x01\x01\x12\r\n\x05\x65mail\x18\x05 \x01(\t\x12\x0c\n\x04role\x18\x06 \x01(\tB\x0f\n\r_phone_number\"?\n\x19RequestModifyUserPassword\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"\x8f\x01\n\x15RequestModifyUserInfo\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x11\n\x04name\x18\x02 \x01(\tH\x00\x88\x01\x01\x12\x12\n\x05\x65mail\x18\x03 \x01(\tH\x01\x88\x01\x01\x12\x19\n\x0cphone_number\x18\x04 \x01(\tH\x02\x88\x01\x01\x42\x07\n\x05_nameB\x08\n\x06_emailB\x0f\n\r_phone_number\"%\n\x11RequestDeleteUser\x12\x10\n\x08username\x18\x01 \x01(\t\"#\n\x0fRequestUserInfo\x12\x10\n\x08username\x18\x01 \x01(\t\"-\n\x0c\x42\x61seResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x0c\n\x04\x63ode\x18\x02 \x01(\x05\"{\n\x10ResponseUserInfo\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\x05\x12\r\n\x05\x65mail\x18\x03 \x01(\t\x12\x19\n\x0cphone_number\x18\x04 \x01(\tH\x00\x88\x01\x01\x12\x0c\n\x04role\x18\x05 \x01(\tB\x0f\n\r_phone_number2\x9a\x02\n\x08\x44\x61taBase\x12\x30\n\x07GetUser\x12\x10.RequestUserInfo\x1a\x11.ResponseUserInfo\"\x00\x12+\n\x07NewUser\x12\x0f.RequestNewUSer\x1a\r.BaseResponse\"\x00\x12\x41\n\x12ModifyUserPassword\x12\x1a.RequestModifyUserPassword\x1a\r.BaseResponse\"\x00\x12\x39\n\x0eModifyUserInfo\x12\x16.RequestModifyUserInfo\x1a\r.BaseResponse\"\x00\x12\x31\n\nDeleteUser\x12\x12.RequestDeleteUser\x1a\r.BaseResponse\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0e\x64\x61tabase.proto\"\x84\x01\n\x0eRequestNewUser\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\x12\x14\n\x0cphone_number\x18\x04 \x01(\t\x12\x12\n\x05\x65mail\x18\x05 \x01(\tH\x00\x88\x01\x01\x12\x0c\n\x04role\x18\x06 \x01(\tB\x08\n\x06_email\"?\n\x19RequestModifyUserPassword\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"\x8f\x01\n\x15RequestModifyUserInfo\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x11\n\x04name\x18\x02 \x01(\tH\x00\x88\x01\x01\x12\x12\n\x05\x65mail\x18\x03 \x01(\tH\x01\x88\x01\x01\x12\x19\n\x0cphone_number\x18\x04 \x01(\tH\x02\x88\x01\x01\x42\x07\n\x05_nameB\x08\n\x06_emailB\x0f\n\r_phone_number\"%\n\x11RequestDeleteUser\x12\x10\n\x08username\x18\x01 \x01(\t\"#\n\x0fRequestUserInfo\x12\x10\n\x08username\x18\x01 \x01(\t\"-\n\x0c\x42\x61seResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\x12\x0c\n\x04\x63ode\x18\x02 \x01(\x05\"t\n\x10ResponseUserInfo\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\x05\x12\x12\n\x05\x65mail\x18\x03 \x01(\tH\x00\x88\x01\x01\x12\x14\n\x0cphone_number\x18\x04 \x01(\t\x12\x0c\n\x04role\x18\x05 \x01(\tB\x08\n\x06_email2\x9a\x02\n\x08\x44\x61taBase\x12\x30\n\x07GetUser\x12\x10.RequestUserInfo\x1a\x11.ResponseUserInfo\"\x00\x12+\n\x07NewUser\x12\x0f.RequestNewUser\x1a\r.BaseResponse\"\x00\x12\x41\n\x12ModifyUserPassword\x12\x1a.RequestModifyUserPassword\x1a\r.BaseResponse\"\x00\x12\x39\n\x0eModifyUserInfo\x12\x16.RequestModifyUserInfo\x1a\r.BaseResponse\"\x00\x12\x31\n\nDeleteUser\x12\x12.RequestDeleteUser\x1a\r.BaseResponse\"\x00\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -22,19 +22,19 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'database_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
   _globals['_REQUESTNEWUSER']._serialized_start=19
-  _globals['_REQUESTNEWUSER']._serialized_end=158
-  _globals['_REQUESTMODIFYUSERPASSWORD']._serialized_start=160
-  _globals['_REQUESTMODIFYUSERPASSWORD']._serialized_end=223
-  _globals['_REQUESTMODIFYUSERINFO']._serialized_start=226
-  _globals['_REQUESTMODIFYUSERINFO']._serialized_end=369
-  _globals['_REQUESTDELETEUSER']._serialized_start=371
-  _globals['_REQUESTDELETEUSER']._serialized_end=408
-  _globals['_REQUESTUSERINFO']._serialized_start=410
-  _globals['_REQUESTUSERINFO']._serialized_end=445
-  _globals['_BASERESPONSE']._serialized_start=447
-  _globals['_BASERESPONSE']._serialized_end=492
-  _globals['_RESPONSEUSERINFO']._serialized_start=494
-  _globals['_RESPONSEUSERINFO']._serialized_end=617
-  _globals['_DATABASE']._serialized_start=620
-  _globals['_DATABASE']._serialized_end=902
+  _globals['_REQUESTNEWUSER']._serialized_end=151
+  _globals['_REQUESTMODIFYUSERPASSWORD']._serialized_start=153
+  _globals['_REQUESTMODIFYUSERPASSWORD']._serialized_end=216
+  _globals['_REQUESTMODIFYUSERINFO']._serialized_start=219
+  _globals['_REQUESTMODIFYUSERINFO']._serialized_end=362
+  _globals['_REQUESTDELETEUSER']._serialized_start=364
+  _globals['_REQUESTDELETEUSER']._serialized_end=401
+  _globals['_REQUESTUSERINFO']._serialized_start=403
+  _globals['_REQUESTUSERINFO']._serialized_end=438
+  _globals['_BASERESPONSE']._serialized_start=440
+  _globals['_BASERESPONSE']._serialized_end=485
+  _globals['_RESPONSEUSERINFO']._serialized_start=487
+  _globals['_RESPONSEUSERINFO']._serialized_end=603
+  _globals['_DATABASE']._serialized_start=606
+  _globals['_DATABASE']._serialized_end=888
 # @@protoc_insertion_point(module_scope)

@@ -21,7 +21,7 @@ class DataBaseStub(object):
                 )
         self.NewUser = channel.unary_unary(
                 '/DataBase/NewUser',
-                request_serializer=database__pb2.RequestNewUSer.SerializeToString,
+                request_serializer=database__pb2.RequestNewUser.SerializeToString,
                 response_deserializer=database__pb2.BaseResponse.FromString,
                 )
         self.ModifyUserPassword = channel.unary_unary(
@@ -84,7 +84,7 @@ def add_DataBaseServicer_to_server(servicer, server):
             ),
             'NewUser': grpc.unary_unary_rpc_method_handler(
                     servicer.NewUser,
-                    request_deserializer=database__pb2.RequestNewUSer.FromString,
+                    request_deserializer=database__pb2.RequestNewUser.FromString,
                     response_serializer=database__pb2.BaseResponse.SerializeToString,
             ),
             'ModifyUserPassword': grpc.unary_unary_rpc_method_handler(
@@ -141,7 +141,7 @@ class DataBase(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/DataBase/NewUser',
-            database__pb2.RequestNewUSer.SerializeToString,
+            database__pb2.RequestNewUser.SerializeToString,
             database__pb2.BaseResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
