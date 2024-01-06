@@ -3,3 +3,4 @@
 1401= username not exists
 1402= There is no field to update
 1403= User already exists
+1405= Exception in database service (check the logs for more detail)
