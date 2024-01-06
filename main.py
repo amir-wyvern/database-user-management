@@ -1,28 +1,28 @@
-import grpc 
-from concurrent import futures
 import grpc_utils.database_pb2_grpc as pb2_grpc
-import grpc_utils.database_pb2 as pb2
-import logging
-from db.inital import init_database
-from db.database import get_db
 from schemas import UserRegisterForDataBase
+import grpc_utils.database_pb2 as pb2
+from db.inital import init_database
+from concurrent import futures
+from db.database import get_db
+from db import db_user
+import logging
+import grpc 
 import os
 
-from db import db_user
 
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 # Create a console handler to show logs on terminal
 console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
+console_handler.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(levelname)s | %(message)s')
 console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 
 # Create a file handler to save logs to a file
 file_handler = logging.FileHandler('database_api.log')
-file_handler.setLevel(logging.INFO)
+file_handler.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(levelname)s | %(message)s')
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
@@ -44,12 +44,14 @@ class DataBaseService(pb2_grpc.DataBaseServicer):
 
      def GetUser(self, request, context):
 
+        logging.debug(f'[GetUser] Receive a Requests [username: {request.username}]')
+
         try:
             user = db_user.get_user_by_username(request.username ,get_db().__next__())
 
             if user is None:
-
-                return pb2.BaseResponse(**{'message': 'username not exist' , 'code': 1401})
+                logging.debug(f'[GetUser] Username Not Found [username: {request.username}]')
+                return pb2.ResponseUserInfo(**{'message': 'Username Not Found' , 'code': 1401})
             
             user_data = {
                 'username': user.username,
@@ -58,26 +60,27 @@ class DataBaseService(pb2_grpc.DataBaseServicer):
                 'phone_number': user.phone_number,
                 'role': user.role
             } 
-            return pb2.BaseResponse(**{'message': 'success' , 'code': 1200, 'data': user_data})
+
+            return pb2.ResponseUserInfo(**{'message': 'success' , 'code': 1200, 'data': user_data})
 
 
         except Exception as e:
         
-            logging.error(f'error [fn: GetUser err_msg: {e}')
-
-            return pb2.BaseResponse(**{'message': 'failed' , 'code': 1400})
+            logging.error(f'[GetUser] occure an error [error: {e}]')
+            return pb2.ResponseUserInfo(**{'message': 'Exception in database service (check the logs for more detail)' , 'code': 1405})
 
 
      def NewUser(self, request, context):
-
-
+    
+        logging.debug(f'[NewUser] Receive a Requests [username: {request.username}]')
+    
         try:
             
             user = db_user.get_user_by_username(request.username ,get_db().__next__())
 
             if user:
-
-                return pb2.BaseResponse(**{'message': 'username already exist' , 'code': 1403})
+                logging.debug(f'[NewUser] Username already exists [username: {request.username}]')
+                return pb2.BaseResponse(**{'message': 'Username already exist' , 'code': 1403})
             
             receive_data = {
                 'name': request.name,
@@ -88,51 +91,53 @@ class DataBaseService(pb2_grpc.DataBaseServicer):
                 'role': request.role
             }
             db_user.create_user(UserRegisterForDataBase(**receive_data) ,get_db().__next__())
-            logging.info(f'create user was successfully [username: {request.username}]')
+            logging.info(f'[NewUser] create user was successfully [username: {request.username}]')
 
             return pb2.BaseResponse(**{'message': 'success' , 'code': 1200})
         
         except Exception as e:
         
-            logging.error(f'error [fn: NewUser err_msg: {e}')
-
-            return pb2.BaseResponse(**{'message': 'failed' , 'code': 1400})
+            logging.error(f'[NewUser] occure an error [error: {e}]')
+            return pb2.BaseResponse(**{'message': 'Exception in database service (check the logs for more detail)' , 'code': 1405})
 
 
      def ModifyUserPassword(self, request, context):
 
+        logging.debug(f'[ModifyUserPassword] Receive a Requests [username: {request.username}]')
+
         try:
             user = db_user.get_user_by_username(request.username ,get_db().__next__())
 
             if user is None:
-
-                return pb2.BaseResponse(**{'message': 'username not exist' ,'code': 1401})
+                logging.debug(f'[ModifyUserPassword] Username Not Found [username: {request.username}]')
+                return pb2.BaseResponse(**{'message': 'Username Not Found' ,'code': 1401})
             
             db_user.update_password(user.user_id, request.password ,get_db().__next__())
-            logging.info(f'user password updated successfully [username: {request.username}]')
+            logging.info(f'[ModifyUserPassword] user password updated successfully [username: {request.username}]')
 
             return pb2.BaseResponse(**{'message': 'success' ,'code': 1200})
         
         except Exception as e:
         
-            logging.error(f'error [fn: ModifyUserPassword err_msg: {e}')
-
-            return pb2.BaseResponse(**{'message': 'failed' ,'code': 1400})
+            logging.error(f'[ModifyUserPassword] occure an error [error: {e}]')
+            return pb2.BaseResponse(**{'message': 'Exception in database service (check the logs for more detail)' ,'code': 1405})
 
      
      def ModifyUserInfo(self, request, context):
 
+        logging.debug(f'[ModifyUserInfo] Receive a Requests [username: {request.username}]')
+
         try:
             user = db_user.get_user_by_username(request.username ,get_db().__next__())
 
             if user is None:
-
-                return pb2.BaseResponse(**{'message': 'username not exist' ,'code': 1401})
+                logging.debug(f'[ModifyUserInfo] Username Not Found [username: {request.username}]')
+                return pb2.BaseResponse(**{'message': 'Username Not Found' ,'code': 1401})
             
             if not any([request.name, request.email, request.phone_number]):
-            
+                logging.debug(f'[ModifyUserInfo] There is no field to update [username: {request.username}]')
                 return pb2.BaseResponse(**{'message': 'There is no field to update' ,'code': 1402})
-                
+
             if request.name:
                 db_user.update_name(user.user_id, request.password ,get_db().__next__(), commit= False)
             
@@ -144,75 +149,59 @@ class DataBaseService(pb2_grpc.DataBaseServicer):
 
             get_db().__next__().commit()
 
-            logging.info(f'user info updated successfully [username: {request.username}]')
+            logging.info(f'[ModifyUserInfo] Username info updated successfully [username: {request.username}]')
 
             return pb2.BaseResponse(**{'message': 'success' ,'code': 1200})
         
         except Exception as e:
         
-            logging.error(f'error [fn: ModifyUserPassword err_msg: {e}')
+            logging.error(f'[ModifyUserInfo] occure an error [error: {e}]')
+            return pb2.BaseResponse(**{'message': 'Exception in database service (check the logs for more detail)' ,'code': 1405})
+        
+        
+     def ModifyUserRole(self, request, context):
 
-            return pb2.BaseResponse(**{'message': 'failed' ,'code': 1400})
-        
-        
-     def ModifyUserInfo(self, request, context):
+        logging.debug(f'[ModifyUserRole] Receive a Requests [username: {request.username}]')
 
         try:
             user = db_user.get_user_by_username(request.username ,get_db().__next__())
 
             if user is None:
-
-                return pb2.BaseResponse(**{'message': 'username not exist' ,'code': 1401})
+                logging.debug(f'[ModifyUserRole] Username Not Found [username: {request.username}]')
+                return pb2.BaseResponse(**{'message': 'Username Not Found' ,'code': 1401})
             
-            if not any([request.name, request.email, request.phone_number]):
-            
-                return pb2.BaseResponse(**{'message': 'There is no field to update' ,'code': 1402})
-                
-            if request.name:
-                db_user.update_name(user.user_id, request.password ,get_db().__next__(), commit= False)
-            
-            if request.email:
-                db_user.update_email(user.user_id, request.email ,get_db().__next__(), commit= False)
-            
-            if request.phone_number:
-                db_user.update_phone_number(user.user_id, request.phone_number ,get_db().__next__(), commit= False)
-
-            get_db().__next__().commit()
-
-            logging.info(f'user info updated successfully [username: {request.username}]')
+            db_user.update_role(user.user_id ,request.role ,get_db().__next__())
+            logging.info(f'[ModifyUserRole] Username role updated successfully [username: {request.username} -new_role: {request.role}]')
 
             return pb2.BaseResponse(**{'message': 'success' ,'code': 1200})
         
         except Exception as e:
         
-            logging.error(f'error [fn: ModifyUserPassword err_msg: {e}')
-
-            return pb2.BaseResponse(**{'message': 'failed' ,'code': 1400})
+            logging.error(f'[ModifyUserRole] occure an error [error: {e}]')
+            return pb2.BaseResponse(**{'message': 'Exception in database service (check the logs for more detail)' ,'code': 1405})
 
 
      def DeleteUser(self, request, context):
 
+        logging.debug(f'[DeleteUser] Receive a Requests [username: {request.username}]')
+
         try:
             user = db_user.get_user_by_username(request.username ,get_db().__next__())
 
             if user is None:
-
-                return pb2.BaseResponse(**{'message': 'username not exist' ,'code': 1401})
+                logging.debug(f'[DeleteUser] Username Not Found [username: {request.username}]')
+                return pb2.BaseResponse(**{'message': 'Username Not Found' ,'code': 1401})
             
             db_user.delete_user(request.phone_number ,get_db().__next__())
-
-
-            logging.info(f'user deleted successfully [username: {request.username}]')
+            logging.debug(f'[DeleteUser] Username deleted successfully [username: {request.username}]')
 
             return pb2.BaseResponse(**{'message': 'success' ,'code': 1200})
         
         except Exception as e:
         
-            logging.error(f'error [fn: DeleteUser err_msg: {e}')
+            logging.error(f'[DeleteUser] occure an error [error: {e}]')
+            return pb2.BaseResponse(**{'message': 'Exception in database service (check the logs for more detail)' ,'code': 1405})
 
-            return pb2.BaseResponse(**{'message': 'failed' ,'code': 1400})
-
-     
 
 def serve():
 
@@ -230,7 +219,7 @@ def serve():
 
     except Exception as e:
         
-        logger.error(f'occure error: [{e}]')
+        logger.error(f'Occure error: [{e}]')
         exit(0)
          
 serve()
