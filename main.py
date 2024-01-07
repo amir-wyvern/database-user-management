@@ -1,5 +1,11 @@
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 import grpc_utils.database_pb2_grpc as pb2_grpc
 from schemas import UserRegisterForDataBase
+from passlib.context import CryptContext
 import grpc_utils.database_pb2 as pb2
 from db.inital import init_database
 from concurrent import futures
@@ -7,7 +13,6 @@ from db.database import get_db
 from db import db_user
 import logging
 import grpc 
-import os
 
 
 logger = logging.getLogger()
@@ -32,13 +37,19 @@ PORT = os.getenv("GRPC_PORT")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
+map_enums = {
+    0 : 'ADMIN',
+    1 : 'USER'
+}
+
 if PORT.isdigit():
     PORT = int(PORT)
 
 else:
     logger.error(f'Port is not useable! [port: {PORT}]')
     exit(0)
-    
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class DataBaseService(pb2_grpc.DataBaseServicer):
 
@@ -48,13 +59,14 @@ class DataBaseService(pb2_grpc.DataBaseServicer):
 
         try:
             user = db_user.get_user_by_username(request.username ,get_db().__next__())
-
+            print()
             if user is None:
                 logging.debug(f'[GetUser] Username Not Found [username: {request.username}]')
                 return pb2.ResponseUserInfo(**{'message': 'Username Not Found' , 'code': 1401})
             
             user_data = {
                 'username': user.username,
+                'password': user.password,
                 'name': user.name,
                 'email': user.email,
                 'phone_number': user.phone_number,
@@ -85,11 +97,12 @@ class DataBaseService(pb2_grpc.DataBaseServicer):
             receive_data = {
                 'name': request.name,
                 'username': request.username,
-                'password': request.password,
+                'password': pwd_context.hash(request.password),
                 'phone_number': request.phone_number,
                 'email': request.email,
-                'role': request.role
+                'role': map_enums[request.role]
             }
+
             db_user.create_user(UserRegisterForDataBase(**receive_data) ,get_db().__next__())
             logging.info(f'[NewUser] create user was successfully [username: {request.username}]')
 
@@ -207,7 +220,7 @@ def serve():
 
     try:
 
-        init_database(ADMIN_USERNAME, ADMIN_PASSWORD)
+        init_database(ADMIN_USERNAME, ADMIN_PASSWORD, logger)
 
         logger.info(f'service grpc database is runing [::]:{PORT} ...')
 
