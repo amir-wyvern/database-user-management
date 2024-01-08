@@ -1,19 +1,19 @@
 services:
 
-  grpc:
+  grpc_service:
     build: .
     depends_on:
       - db
   
     networks:
-      - net
+      - share-net
     
     environment:
-      POSTGRES_DATABASE: db_wy
-      POSTGRES_USERNAME: wyvern
-      POSTGRES_PASSWORD: testpass
-      ADMIN_USERNAME: admin
-      ADMIN_PASSWORD: admin_pass
+      POSTGRES_DATABASE: test_db
+      POSTGRES_USERNAME: test_user
+      POSTGRES_PASSWORD: test_pass
+      ADMIN_USERNAME: test_admin
+      ADMIN_PASSWORD: test_admin_pass
       POSTGRES_HOST: db
       POSTGRES_PORT: 5432
       GRPC_PORT: 3333
@@ -24,11 +24,11 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: testpass
-      POSTGRES_USER: wyvern
-      POSTGRES_DB: db_wy
+      POSTGRES_PASSWORD: test_pass
+      POSTGRES_USER: test_user
+      POSTGRES_DB: test_db
     networks:
-      - net
+      - share-net
 
     # healthcheck:
     #   test: [CMD-SHELL", "pg_isready"]
@@ -37,5 +37,5 @@ services:
     #     retries: 10
 
 networks:
-  net:
-    driver: bridge
+  share-net:
+    external: true
