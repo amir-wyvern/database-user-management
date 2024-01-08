@@ -1,7 +1,7 @@
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 
-load_dotenv()
+# load_dotenv()
 
 import grpc_utils.database_pb2_grpc as pb2_grpc
 from schemas import UserRegisterForDataBase
