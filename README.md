@@ -59,6 +59,11 @@ Now You can access to gRPC Host in docker internal network
 [::]:3333
 ```
 
+## Architecture
+
+![Architecture](https://github.com/amir-wyvern/database-user-management/blob/main/pic.png)
+
+
 ## License
 
 MIT
